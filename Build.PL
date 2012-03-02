@@ -15,10 +15,10 @@ my %module_build_args = (
     "dist_author"           => [
         "Chris Fields <cjfields\@bioperl.org>"
     ],
-    "dist_name"             => "Bio-readfq",
+    "dist_name"             => "Bio-Readfq",
     "dist_version"          => "0.01",
     "license"               => "perl",
-    "module_name"           => "Bio::readfq",
+    "module_name"           => "Bio::Readfq",
     "include_dirs"          => [File::Spec->catdir(qw(src readfq))],
     "extra_linker_flags"    => "-lz",
     "recursive_test_files"  => 1,
