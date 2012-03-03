@@ -28,6 +28,8 @@ readfq_fqopen(pack, filename, mode="r")
     OUTPUT:
         RETVAL
 
+#### TODO: add fh-based method?
+
 MODULE = Bio::Readfq PACKAGE = Bio::Readfq::File   PREFIX=file_
 
 Bio::Readfq::Iterator
@@ -36,6 +38,24 @@ file_iterator(fp)
     PROTOTYPE: $
     CODE:
         RETVAL = kseq_init(fp);
+    OUTPUT:
+        RETVAL
+
+z_off_t
+file_fqtell(fp)
+    Bio::Readfq::File fp
+    PROTOTYPE: $
+    CODE:
+        RETVAL = (long)gztell(fp);
+    OUTPUT:
+        RETVAL
+
+z_off_t
+file_fqoffset(fp)
+    Bio::Readfq::File fp
+    PROTOTYPE: $
+    CODE:
+        RETVAL = gzoffset(fp);
     OUTPUT:
         RETVAL
 
@@ -59,11 +79,20 @@ it_next_seq(it)
         if (kseq_read(it) >= 0) {
             results = (HV *)sv_2mortal((SV *)newHV());
             hv_store(results, "name", 4, newSVpv(it->name.s, it->name.l), 0);
-            hv_store(results, "comment", 7, newSVpv(it->comment.s, it->comment.l), 0);
+            hv_store(results, "desc", 4, newSVpv(it->comment.s, it->comment.l), 0);
             hv_store(results, "seq", 3, newSVpv(it->seq.s, it->seq.l), 0);
             hv_store(results, "qual", 4, newSVpv(it->qual.s, it->qual.l), 0);
             ST(0) = newRV((SV *)results);
         }
+
+SV *
+it_pos(it)
+    Bio::Readfq::Iterator it
+    PROTOTYPE: $
+    CODE:
+        RETVAL = newSViv(it->f->begin);
+    OUTPUT:
+        RETVAL
 
 void
 it_DESTROY(it)
