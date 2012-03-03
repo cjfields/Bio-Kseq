@@ -22,9 +22,9 @@ readfq_fqopen(pack, filename, mode="r")
     char *pack
     char *filename
     char *mode
-    PROTOTYPE: $$
+    PROTOTYPE: $$$
     CODE:
-        RETVAL = gzdopen(*filename, mode);
+        RETVAL = gzopen(filename, mode);
     OUTPUT:
         RETVAL
 
