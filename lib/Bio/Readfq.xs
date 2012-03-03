@@ -10,7 +10,7 @@
 #include <perlio.h>
 #include <kseq.h>
 
-KSEQ_INIT(gzFile, gzRead)
+KSEQ_INIT(gzFile, gzread)
 
 typedef kseq_t*         Bio__Readfq__Iterator;
 typedef gzFile          Bio__Readfq__File;
@@ -18,7 +18,8 @@ typedef gzFile          Bio__Readfq__File;
 MODULE = Bio::Readfq PACKAGE = Bio::Readfq  PREFIX=readfq_
 
 Bio::Readfq::File
-readfq_open(filename, mode="r")
+readfq_fqopen(pack, filename, mode="r")
+    char *pack
     char *filename
     char *mode
     PROTOTYPE: $$
@@ -26,10 +27,6 @@ readfq_open(filename, mode="r")
         RETVAL = gzdopen(*filename, mode);
     OUTPUT:
         RETVAL
-
-## Bio::Readfq::Iterator
-## readfq_iterator(fp)
-## kseq_init(fp)
 
 MODULE = Bio::Readfq PACKAGE = Bio::Readfq::File   PREFIX=file_
 
@@ -39,6 +36,8 @@ file_iterator(fp)
     PROTOTYPE: $
     CODE:
         RETVAL = kseq_init(fp);
+    OUTPUT:
+        RETVAL
 
 void
 readfq_DESTROY(fp)

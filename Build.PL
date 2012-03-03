@@ -19,8 +19,9 @@ my %module_build_args = (
     "dist_version"          => "0.01",
     "license"               => "perl",
     "module_name"           => "Bio::Readfq",
+    "extra_compiler_flags"  => ['-fPIC'],
     "include_dirs"          => [File::Spec->catdir(qw(src readfq))],
-    "extra_linker_flags"    => "-lz",
+    "extra_linker_flags"    => ["-lz"],
     "recursive_test_files"  => 1,
 );
 
