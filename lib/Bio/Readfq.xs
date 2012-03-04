@@ -4,6 +4,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #include <zlib.h>
 #include <stdio.h>
@@ -60,7 +61,7 @@ it_next_seq(it)
             hv_store(results, "desc", 4, newSVpv(it->comment.s, it->comment.l), 0);
             hv_store(results, "seq", 3, newSVpv(it->seq.s, it->seq.l), 0);
             hv_store(results, "qual", 4, newSVpv(it->qual.s, it->qual.l), 0);
-            ST(0) = newRV((SV *)results);
+            ST(0) = newRV_inc((SV *)results);
         }
 
 SV *
@@ -79,9 +80,10 @@ it_rewind(it)
     PREINIT:
         int rewind;
     CODE:
-        // kseq_rewind() doesn't completely rewind the file, just resets markers
+        /* kseq_rewind() doesn't completely rewind the file,
+          just resets markers */
         kseq_rewind(it);
-        // use zlib to do so
+        /* use zlib to do so */
         gzrewind(it->f->f);
 
 z_off_t
