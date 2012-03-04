@@ -1,5 +1,4 @@
 TYPEMAP
 Bio::Readfq T_PTROBJ
-Bio::Readfq::File   T_PTROBJ
 Bio::Readfq::Iterator   T_PTROBJ
 z_off_t				T_UV

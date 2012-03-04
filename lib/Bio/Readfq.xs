@@ -13,12 +13,12 @@
 KSEQ_INIT(gzFile, gzread)
 
 typedef kseq_t*         Bio__Readfq__Iterator;
-typedef gzFile          Bio__Readfq__File;
+typedef gzFile          Bio__Readfq;
 
 MODULE = Bio::Readfq PACKAGE = Bio::Readfq  PREFIX=readfq_
 
-Bio::Readfq::File
-readfq_fqopen(pack, filename, mode="r")
+Bio::Readfq
+readfq_new(pack, filename, mode="r")
     char *pack
     char *filename
     char *mode
@@ -28,13 +28,9 @@ readfq_fqopen(pack, filename, mode="r")
     OUTPUT:
         RETVAL
 
-#### TODO: add fh-based method?
-
-MODULE = Bio::Readfq PACKAGE = Bio::Readfq::File   PREFIX=file_
-
 Bio::Readfq::Iterator
-file_iterator(fp)
-    Bio::Readfq::File fp
+readfq_iterator(fp)
+    Bio::Readfq fp
     PROTOTYPE: $
     CODE:
         RETVAL = kseq_init(fp);
@@ -42,8 +38,8 @@ file_iterator(fp)
         RETVAL
 
 z_off_t
-file_fqtell(fp)
-    Bio::Readfq::File fp
+readfq_fqtell(fp)
+    Bio::Readfq fp
     PROTOTYPE: $
     CODE:
         RETVAL = gztell(fp);
@@ -51,8 +47,8 @@ file_fqtell(fp)
         RETVAL
 
 z_off_t
-file_fqoffset(fp)
-    Bio::Readfq::File fp
+readfq_fqoffset(fp)
+    Bio::Readfq fp
     PROTOTYPE: $
     CODE:
         RETVAL = gzoffset(fp);
@@ -61,7 +57,7 @@ file_fqoffset(fp)
 
 void
 readfq_DESTROY(fp)
-    Bio::Readfq::File fp
+    Bio::Readfq fp
     PROTOTYPE: $
     CODE:
         gzclose(fp);
