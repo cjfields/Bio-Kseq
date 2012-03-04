@@ -37,24 +37,6 @@ readfq_iterator(fp)
     OUTPUT:
         RETVAL
 
-z_off_t
-readfq_fqtell(fp)
-    Bio::Readfq fp
-    PROTOTYPE: $
-    CODE:
-        RETVAL = gztell(fp);
-    OUTPUT:
-        RETVAL
-
-z_off_t
-readfq_fqoffset(fp)
-    Bio::Readfq fp
-    PROTOTYPE: $
-    CODE:
-        RETVAL = gzoffset(fp);
-    OUTPUT:
-        RETVAL
-
 void
 readfq_DESTROY(fp)
     Bio::Readfq fp
@@ -97,10 +79,39 @@ it_rewind(it)
     PREINIT:
         int rewind;
     CODE:
-        // kseq_rewind() doesn't completely rewind the file
+        // kseq_rewind() doesn't completely rewind the file, just resets markers
         kseq_rewind(it);
         // use zlib to do so
         gzrewind(it->f->f);
+
+z_off_t
+it_seek(it, offset, whence)
+    Bio::Readfq::Iterator it
+    z_off_t             offset
+    int                 whence
+    PROTOTYPE: $$$
+    CODE:
+        RETVAL = gzseek(it->f->f, offset, whence);
+    OUTPUT:
+        RETVAL
+
+z_off_t
+it_tell(it)
+    Bio::Readfq::Iterator it
+    PROTOTYPE: $
+    CODE:
+        RETVAL = gztell(it->f->f);
+    OUTPUT:
+        RETVAL
+
+z_off_t
+it_offset(it)
+    Bio::Readfq::Iterator it
+    PROTOTYPE: $
+    CODE:
+        RETVAL = gzoffset(it->f->f);
+    OUTPUT:
+        RETVAL
 
 void
 it_DESTROY(it)
