@@ -46,7 +46,7 @@ file_fqtell(fp)
     Bio::Readfq::File fp
     PROTOTYPE: $
     CODE:
-        RETVAL = (long)gztell(fp);
+        RETVAL = gztell(fp);
     OUTPUT:
         RETVAL
 
@@ -93,6 +93,18 @@ it_pos(it)
         RETVAL = newSViv(it->f->begin);
     OUTPUT:
         RETVAL
+
+void
+it_rewind(it)
+    Bio::Readfq::Iterator it
+    PROTOTYPE: $
+    PREINIT:
+        int rewind;
+    CODE:
+        // kseq_rewind() doesn't completely rewind the file
+        kseq_rewind(it);
+        // use zlib to do so
+        gzrewind(it->f->f);
 
 void
 it_DESTROY(it)
