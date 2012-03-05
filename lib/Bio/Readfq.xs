@@ -77,8 +77,6 @@ void
 it_rewind(it)
     Bio::Readfq::Iterator it
     PROTOTYPE: $
-    PREINIT:
-        int rewind;
     CODE:
         /* kseq_rewind() doesn't completely rewind the file,
           just resets markers */
@@ -86,19 +84,32 @@ it_rewind(it)
         /* use zlib to do so */
         gzrewind(it->f->f);
 
+int
+it_gzrewind(it)
+    Bio::Readfq::Iterator it
+    PROTOTYPE: $
+    CODE:
+        RETVAL = gzrewind(it->f->f);
+    OUTPUT:
+        RETVAL
+
 z_off_t
-it_seek(it, offset, whence)
+it_gzseek(it, offset, whence)
     Bio::Readfq::Iterator it
     z_off_t             offset
     int                 whence
     PROTOTYPE: $$$
     CODE:
+        /*
+           note this is supposed to be very slow with zipped, not sure about
+           uncompressed...
+        */
         RETVAL = gzseek(it->f->f, offset, whence);
     OUTPUT:
         RETVAL
 
 z_off_t
-it_tell(it)
+it_gztell(it)
     Bio::Readfq::Iterator it
     PROTOTYPE: $
     CODE:
@@ -107,7 +118,7 @@ it_tell(it)
         RETVAL
 
 z_off_t
-it_offset(it)
+it_gzoffset(it)
     Bio::Readfq::Iterator it
     PROTOTYPE: $
     CODE:
