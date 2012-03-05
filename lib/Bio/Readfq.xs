@@ -117,18 +117,10 @@ it_gztell(it)
     OUTPUT:
         RETVAL
 
-z_off_t
-it_gzoffset(it)
-    Bio::Readfq::Iterator it
-    PROTOTYPE: $
-    CODE:
-        RETVAL = gzoffset(it->f->f);
-    OUTPUT:
-        RETVAL
-
 void
 it_DESTROY(it)
     Bio::Readfq::Iterator it
     PROTOTYPE: $
     CODE:
         kseq_destroy(it);
+
