@@ -13,13 +13,13 @@
 
 KSEQ_INIT(gzFile, gzread)
 
-typedef kseq_t*         Bio__Readfq__Iterator;
-typedef gzFile          Bio__Readfq;
+typedef kseq_t*         Bio__Kseq__Iterator;
+typedef gzFile          Bio__Kseq;
 
-MODULE = Bio::Readfq PACKAGE = Bio::Readfq  PREFIX=readfq_
+MODULE = Bio::Kseq PACKAGE = Bio::Kseq  PREFIX=kseq_
 
-Bio::Readfq
-readfq_new(pack, filename, mode="r")
+Bio::Kseq
+kseq_new(pack, filename, mode="r")
     char *pack
     char *filename
     char *mode
@@ -29,9 +29,9 @@ readfq_new(pack, filename, mode="r")
     OUTPUT:
         RETVAL
 
-Bio::Readfq::Iterator
-readfq_iterator(fp)
-    Bio::Readfq fp
+Bio::Kseq::Iterator
+kseq_iterator(fp)
+    Bio::Kseq fp
     PROTOTYPE: $
     CODE:
         RETVAL = kseq_init(fp);
@@ -39,17 +39,17 @@ readfq_iterator(fp)
         RETVAL
 
 void
-readfq_DESTROY(fp)
-    Bio::Readfq fp
+kseq_DESTROY(fp)
+    Bio::Kseq fp
     PROTOTYPE: $
     CODE:
         gzclose(fp);
 
-MODULE = Bio::Readfq PACKAGE = Bio::Readfq::Iterator   PREFIX=it_
+MODULE = Bio::Kseq PACKAGE = Bio::Kseq::Iterator   PREFIX=it_
 
 SV *
 it_next_seq(it)
-    Bio::Readfq::Iterator it
+    Bio::Kseq::Iterator it
     PROTOTYPE: $
     INIT:
         HV * results;
@@ -66,7 +66,7 @@ it_next_seq(it)
 
 SV *
 it_pos(it)
-    Bio::Readfq::Iterator it
+    Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
         RETVAL = newSViv(it->f->begin);
@@ -75,7 +75,7 @@ it_pos(it)
 
 void
 it_rewind(it)
-    Bio::Readfq::Iterator it
+    Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
         /* kseq_rewind() doesn't completely rewind the file,
@@ -86,7 +86,7 @@ it_rewind(it)
 
 int
 it_gzrewind(it)
-    Bio::Readfq::Iterator it
+    Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
         RETVAL = gzrewind(it->f->f);
@@ -95,7 +95,7 @@ it_gzrewind(it)
 
 z_off_t
 it_gzseek(it, offset, whence)
-    Bio::Readfq::Iterator it
+    Bio::Kseq::Iterator it
     z_off_t             offset
     int                 whence
     PROTOTYPE: $$$
@@ -110,7 +110,7 @@ it_gzseek(it, offset, whence)
 
 z_off_t
 it_gztell(it)
-    Bio::Readfq::Iterator it
+    Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
         RETVAL = gztell(it->f->f);
@@ -119,8 +119,7 @@ it_gztell(it)
 
 void
 it_DESTROY(it)
-    Bio::Readfq::Iterator it
+    Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
         kseq_destroy(it);
-

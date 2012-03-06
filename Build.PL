@@ -11,7 +11,7 @@ my %module_build_args = (
     "configure_requires"    => {
         "Module::Build"         => "0.3601"
     },
-    "dist_abstract"         => "low-level XS-based FASTQ/FASTA parser",
+    "dist_abstract"         => "low-level XS-based bindings to klib",
     "dist_author"           => [
         "Chris Fields <cjfields\@bioperl.org>"
     ],
