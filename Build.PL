@@ -20,7 +20,7 @@ my %module_build_args = (
     "license"               => "perl",
     "module_name"           => "Bio::Readfq",
     "extra_compiler_flags"  => ['-fPIC'],
-    "include_dirs"          => ['.', File::Spec->catdir(qw(src readfq))],
+    "include_dirs"          => ['.', File::Spec->catdir(qw(src klib))],
     "extra_linker_flags"    => ["-lz"],
     "recursive_test_files"  => 1,
 );
