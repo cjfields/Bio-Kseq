@@ -11,3 +11,6 @@ use base qw(DynaLoader);
 bootstrap Bio::Kseq;
 
 1;
+
+__END__
+

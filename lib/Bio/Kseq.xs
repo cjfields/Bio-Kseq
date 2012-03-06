@@ -1,15 +1,24 @@
 #ifdef PERL_CAPI
 #define WIN32IO_IS_STDIO
 #endif
+
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+
+#ifdef USE_SFIO
+  #include <config.h>
+#else
+  #include <stdio.h>
+#endif
+#include <perlio.h>
+
 #include "ppport.h"
 
 #include <zlib.h>
-#include <stdio.h>
-#include <perlio.h>
-#include <kseq.h>
+#include "kseq.h"
+
+/* TODO: define error checking, and clean up possible stdio/PerlIO issues */
 
 KSEQ_INIT(gzFile, gzread)
 
@@ -50,11 +59,22 @@ kseq_iterator(fp)
         RETVAL
 
 void
+kseq_close(fp)
+    Bio::Kseq fp
+    PROTOTYPE: $
+    CODE:
+        if (fileno(fp)) {
+            gzclose(fp);
+        }
+
+void
 kseq_DESTROY(fp)
     Bio::Kseq fp
     PROTOTYPE: $
     CODE:
-        gzclose(fp);
+        if (fileno(fp)) {
+            gzclose(fp);
+        }
 
 MODULE = Bio::Kseq PACKAGE = Bio::Kseq::Iterator   PREFIX=it_
 
