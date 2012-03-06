@@ -29,6 +29,17 @@ kseq_new(pack, filename, mode="r")
     OUTPUT:
         RETVAL
 
+Bio::Kseq
+kseq_newfh(pack, fh, mode="r")
+    char *pack
+    PerlIO* fh
+    char *mode
+    PROTOTYPE: $$$
+    CODE:
+        RETVAL = gzdopen(PerlIO_fileno(fh), mode);
+    OUTPUT:
+        RETVAL
+
 Bio::Kseq::Iterator
 kseq_iterator(fp)
     Bio::Kseq fp
