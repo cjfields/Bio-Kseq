@@ -4,7 +4,7 @@ use warnings;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(test_output_file test_input_file);
+our @EXPORT = qw(test_output_file test_output_dir test_input_file);
 
 =head2 test_output_file
 
