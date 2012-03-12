@@ -1,4 +1,5 @@
 TYPEMAP
 Bio::Kseq T_PTROBJ
 Bio::Kseq::Iterator   T_PTROBJ
+Bio::Ksw    T_PTROBJ
 z_off_t				T_UV
