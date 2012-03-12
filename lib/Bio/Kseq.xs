@@ -18,6 +18,10 @@
 #include <zlib.h>
 #include "kseq.h"
 
+#define ord(c) ((int)(unsigned char)(c))
+#define chr(n) ((char)(n))
+#define trunc(x)  ((integer)(x))
+
 /* TODO: define error checking, and clean up possible stdio/PerlIO issues */
 
 KSEQ_INIT(gzFile, gzread)
