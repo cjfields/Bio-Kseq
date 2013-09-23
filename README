@@ -1,1 +1,6 @@
-This is to be a simple low-level Perl interface to Heng Li's readfq code.
+This is to be a simple low-level Perl interface to the kseq C interface for reading
+FASTA/FASTQ files.  See:
+
+    https://github.com/attractivechaos/klib
+
+for more details.
