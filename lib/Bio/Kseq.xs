@@ -77,25 +77,26 @@ it_next_seq(it)
     PROTOTYPE: $
     INIT:
         HV * results;
+        SV ** stuff;
     CODE:
         ST(0) = sv_newmortal();
         if (kseq_read(it) >= 0) {
             results = (HV *)sv_2mortal((SV *)newHV());
-            hv_store(results, "name", 4, newSVpv(it->name.s, it->name.l), 0);
-            hv_store(results, "desc", 4, newSVpv(it->comment.s, it->comment.l), 0);
-            hv_store(results, "seq", 3, newSVpv(it->seq.s, it->seq.l), 0);
-            hv_store(results, "qual", 4, newSVpv(it->qual.s, it->qual.l), 0);
+            stuff = hv_store(results, "name", 4, newSVpv(it->name.s, it->name.l), 0);
+            stuff = hv_store(results, "desc", 4, newSVpv(it->comment.s, it->comment.l), 0);
+            stuff = hv_store(results, "seq", 3, newSVpv(it->seq.s, it->seq.l), 0);
+            stuff = hv_store(results, "qual", 4, newSVpv(it->qual.s, it->qual.l), 0);
             ST(0) = newRV_inc((SV *)results);
         }
 
-SV *
-it_pos(it)
-    Bio::Kseq::Iterator it
-    PROTOTYPE: $
-    CODE:
-        RETVAL = newSViv(it->f->begin);
-    OUTPUT:
-        RETVAL
+#SV *
+#it_pos(it)
+#    Bio::Kseq::Iterator it
+#    PROTOTYPE: $
+#    CODE:
+#        RETVAL = newSViv(it->f->begin);
+#    OUTPUT:
+#        RETVAL
 
 void
 it_rewind(it)
@@ -108,38 +109,38 @@ it_rewind(it)
         /* use zlib to do so */
         gzrewind(it->f->f);
 
-int
-it_gzrewind(it)
-    Bio::Kseq::Iterator it
-    PROTOTYPE: $
-    CODE:
-        RETVAL = gzrewind(it->f->f);
-    OUTPUT:
-        RETVAL
-
-z_off_t
-it_gzseek(it, offset, whence)
-    Bio::Kseq::Iterator it
-    z_off_t             offset
-    int                 whence
-    PROTOTYPE: $$$
-    CODE:
-        /*
-           note this is supposed to be very slow with zipped, not sure about
-           uncompressed...
-        */
-        RETVAL = gzseek(it->f->f, offset, whence);
-    OUTPUT:
-        RETVAL
-
-z_off_t
-it_gztell(it)
-    Bio::Kseq::Iterator it
-    PROTOTYPE: $
-    CODE:
-        RETVAL = gztell(it->f->f);
-    OUTPUT:
-        RETVAL
+#int
+#it_gzrewind(it)
+#    Bio::Kseq::Iterator it
+#    PROTOTYPE: $
+#    CODE:
+#        RETVAL = gzrewind(it->f->f);
+#    OUTPUT:
+#        RETVAL
+#
+#z_off_t
+#it_gzseek(it, offset, whence)
+#    Bio::Kseq::Iterator it
+#    z_off_t             offset
+#    int                 whence
+#    PROTOTYPE: $$$
+#    CODE:
+#        /*
+#           note this is supposed to be very slow with zipped, not sure about
+#           uncompressed...
+#        */
+#        RETVAL = gzseek(it->f->f, offset, whence);
+#    OUTPUT:
+#        RETVAL
+#
+#z_off_t
+#it_gztell(it)
+#    Bio::Kseq::Iterator it
+#    PROTOTYPE: $
+#    CODE:
+#        RETVAL = gztell(it->f->f);
+#    OUTPUT:
+#        RETVAL
 
 void
 it_DESTROY(it)
