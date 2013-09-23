@@ -81,18 +81,10 @@ it_next_seq(it)
         ST(0) = sv_newmortal();
         if (kseq_read(it) >= 0) {
             results = (HV *)sv_2mortal((SV *)newHV());
-            if (it->name.l > 0) {
-                hv_store(results, "name", 4, newSVpv(it->name.s, it->name.l), 0);
-            }
-            if (it->comment.l > 0 ) {
-                hv_store(results, "desc", 4, newSVpv(it->comment.s, it->comment.l), 0);
-            }
-            if (it->seq.l > 0 ) {
-                hv_store(results, "seq", 3, newSVpv(it->seq.s, it->seq.l), 0);
-            }
-            if (it->qual.l > 0) {
-                hv_store(results, "qual", 4, newSVpv(it->qual.s, it->qual.l), 0);
-            }
+            hv_store(results, "name", 4, newSVpv(it->name.s, it->name.l), 0);
+            hv_store(results, "desc", 4, newSVpv(it->comment.s, it->comment.l), 0);
+            hv_store(results, "seq", 3, newSVpv(it->seq.s, it->seq.l), 0);
+            hv_store(results, "qual", 4, newSVpv(it->qual.s, it->qual.l), 0);
             ST(0) = newRV_inc((SV *)results);
         }
 
