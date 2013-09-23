@@ -22,6 +22,8 @@
 #define chr(n) ((char)(n))
 #define trunc(x)  ((integer)(x))
 
+/* TODO: rework in terms of kseq_t, kstream_t and kstring_t struct interfaces, these are very likely source of mem leaks */
+
 /* TODO: define error checking, and clean up possible stdio/PerlIO issues */
 
 KSEQ_INIT(gzFile, gzread)
