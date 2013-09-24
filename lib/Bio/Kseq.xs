@@ -69,7 +69,6 @@ file_DESTROY(fp)
     Bio::Kseq::Fh fp
     PROTOTYPE: $
     CODE:
-        fprintf(stderr, "Destroying Fh\n");
         gzclose(fp);
 
 #MODULE = Bio::Kseq PACKAGE = Bio::Kseq::Kstring   PREFIX=kstr_
@@ -163,12 +162,11 @@ kstream_DESTROY(kstr)
     Bio::Kseq::Kstream kstr
     PROTOTYPE: $
     CODE:
-        fprintf(stderr, "Destroying Kstream\n");
         ks_destroy(kstr);
 
 MODULE = Bio::Kseq PACKAGE = Bio::Kseq::Iterator   PREFIX=it_
 
-SV *
+HV *
 it_next_seq(it)
     Bio::Kseq::Iterator it
     PROTOTYPE: $
@@ -176,24 +174,28 @@ it_next_seq(it)
         HV * results;
         SV ** stuff;
     CODE:
-        ST(0) = sv_newmortal();
+        results = newHV();
         if (kseq_read(it) >= 0) {
-            results = (HV *)sv_2mortal((SV *)newHV());
-            stuff = hv_store(results, "name", 4, newSVpv(it->name.s, it->name.l), 0);
-            stuff = hv_store(results, "desc", 4, newSVpv(it->comment.s, it->comment.l), 0);
-            stuff = hv_store(results, "seq", 3, newSVpv(it->seq.s, it->seq.l), 0);
-            stuff = hv_store(results, "qual", 4, newSVpv(it->qual.s, it->qual.l), 0);
-            ST(0) = newRV_inc((SV *)results);
+            stuff = hv_stores(results, "name", newSVpvn(it->name.s, it->name.l));
+            stuff = hv_stores(results, "desc", newSVpvn(it->comment.s, it->comment.l));
+            stuff = hv_stores(results, "seq", newSVpvn(it->seq.s, it->seq.l));
+            stuff = hv_stores(results, "qual", newSVpvn(it->qual.s, it->qual.l));
+            RETVAL = results;
+        } else {
+            XSRETURN_UNDEF;
         }
+    OUTPUT:
+        RETVAL
 
-#SV *
-#it_pos(it)
-#    Bio::Kseq::Iterator it
-#    PROTOTYPE: $
-#    CODE:
-#        RETVAL = newSViv(it->f->begin);
-#    OUTPUT:
-#        RETVAL
+int
+it_read(it)
+    Bio::Kseq::Iterator it
+    PROTOTYPE: $
+    INIT:
+    CODE:
+        RETVAL = kseq_read(it);
+    OUTPUT:
+        RETVAL
 
 void
 it_rewind(it)
@@ -260,45 +262,9 @@ it_last_char(it)
     OUTPUT:
         RETVAL
 
-#int
-#it_gzrewind(it)
-#    Bio::Kseq::Iterator it
-#    PROTOTYPE: $
-#    CODE:
-#        RETVAL = gzrewind(it->f->f);
-#    OUTPUT:
-#        RETVAL
-#
-#z_off_t
-#it_gzseek(it, offset, whence)
-#    Bio::Kseq::Iterator it
-#    z_off_t             offset
-#    int                 whence
-#    PROTOTYPE: $$$
-#    CODE:
-#        /*
-#           note this is supposed to be very slow with zipped, not sure about
-#           uncompressed...
-#        */
-#        RETVAL = gzseek(it->f->f, offset, whence);
-#    OUTPUT:
-#        RETVAL
-#
-#z_off_t
-#it_gztell(it)
-#    Bio::Kseq::Iterator it
-#    PROTOTYPE: $
-#    CODE:
-#        RETVAL = gztell(it->f->f);
-#    OUTPUT:
-#        RETVAL
-
 void
 it_DESTROY(it)
     Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
-        fprintf(stderr, "Destroying Kseq\n");
-		ks_destroy(ks->f);
-		free(ks);
         kseq_destroy(it);
