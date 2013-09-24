@@ -69,38 +69,37 @@ file_DESTROY(fp)
     Bio::Kseq::Fh fp
     PROTOTYPE: $
     CODE:
+        fprintf(stderr, "Destroying Fh\n");
         gzclose(fp);
 
-MODULE = Bio::Kseq PACKAGE = Bio::Kseq::Kstring   PREFIX=kstr_
-
-size_t
-kstr_l(kstr)
-    Bio::Kseq::Kstring kstr
-    PROTOTYPE: $
-    CODE:
-        RETVAL = kstr->l;
-    OUTPUT:
-        RETVAL
-
-size_t
-kstr_m(kstr)
-    Bio::Kseq::Kstring kstr
-    PROTOTYPE: $
-    CODE:
-        RETVAL = kstr->m;
-    OUTPUT:
-        RETVAL
-
-char*
-kstr_s(kstr)
-    Bio::Kseq::Kstring kstr
-    PROTOTYPE: $
-    CODE:
-        RETVAL = kstr->s;
-    OUTPUT:
-        RETVAL
-
-/* TODO: DESTROY for Kstring */
+#MODULE = Bio::Kseq PACKAGE = Bio::Kseq::Kstring   PREFIX=kstr_
+#
+#size_t
+#kstr_l(kstr)
+#    Bio::Kseq::Kstring kstr
+#    PROTOTYPE: $
+#    CODE:
+#        RETVAL = kstr->l;
+#    OUTPUT:
+#        RETVAL
+#
+#size_t
+#kstr_m(kstr)
+#    Bio::Kseq::Kstring kstr
+#    PROTOTYPE: $
+#    CODE:
+#        RETVAL = kstr->m;
+#    OUTPUT:
+#        RETVAL
+#
+#char*
+#kstr_s(kstr)
+#    Bio::Kseq::Kstring kstr
+#    PROTOTYPE: $
+#    CODE:
+#        RETVAL = kstr->s;
+#    OUTPUT:
+#        RETVAL
 
 MODULE = Bio::Kseq PACKAGE = Bio::Kseq::Kstream   PREFIX=kstream_
 
@@ -164,6 +163,7 @@ kstream_DESTROY(kstr)
     Bio::Kseq::Kstream kstr
     PROTOTYPE: $
     CODE:
+        fprintf(stderr, "Destroying Kstream\n");
         ks_destroy(kstr);
 
 MODULE = Bio::Kseq PACKAGE = Bio::Kseq::Iterator   PREFIX=it_
@@ -215,43 +215,39 @@ it_kstream(it)
     OUTPUT:
         RETVAL
 
-Bio::Kseq::Kstring
+char *
 it_name(it)
     Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
-        /* TODO: needs to be fixed */
-        RETVAL = &it->name;
+        RETVAL = it->name.s;
     OUTPUT:
         RETVAL
 
-Bio::Kseq::Kstring
+char *
 it_comment(it)
     Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
-        /* TODO: needs to be fixed */
-        RETVAL = &it->comment;
+        RETVAL = it->comment.s;
     OUTPUT:
         RETVAL
 
-Bio::Kseq::Kstring
+char *
 it_seq(it)
     Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
-        /* TODO: needs to be fixed */
-        RETVAL = &it->seq;
+        RETVAL = it->seq.s;
     OUTPUT:
         RETVAL
 
-Bio::Kseq::Kstring
+char *
 it_qual(it)
     Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
-        /* TODO: needs to be fixed */
-        RETVAL = &it->qual;
+        RETVAL = it->qual.s;
     OUTPUT:
         RETVAL
 
@@ -302,4 +298,7 @@ it_DESTROY(it)
     Bio::Kseq::Iterator it
     PROTOTYPE: $
     CODE:
+        fprintf(stderr, "Destroying Kseq\n");
+		ks_destroy(ks->f);
+		free(ks);
         kseq_destroy(it);
