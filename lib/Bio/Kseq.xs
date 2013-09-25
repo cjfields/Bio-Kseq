@@ -166,21 +166,20 @@ kstream_DESTROY(kstr)
 
 MODULE = Bio::Kseq PACKAGE = Bio::Kseq::Iterator   PREFIX=it_
 
-HV *
+SV *
 it_next_seq(it)
     Bio::Kseq::Iterator it
     PROTOTYPE: $
     INIT:
         HV * results;
-        SV ** stuff;
     CODE:
-        results = newHV();
+        results = (HV *)sv_2mortal((SV *)newHV());
         if (kseq_read(it) >= 0) {
-            stuff = hv_stores(results, "name", newSVpvn(it->name.s, it->name.l));
-            stuff = hv_stores(results, "desc", newSVpvn(it->comment.s, it->comment.l));
-            stuff = hv_stores(results, "seq", newSVpvn(it->seq.s, it->seq.l));
-            stuff = hv_stores(results, "qual", newSVpvn(it->qual.s, it->qual.l));
-            RETVAL = results;
+            hv_stores(results, "name", newSVpvn(it->name.s, it->name.l));
+            hv_stores(results, "desc", newSVpvn(it->comment.s, it->comment.l));
+            hv_stores(results, "seq", newSVpvn(it->seq.s, it->seq.l));
+            hv_stores(results, "qual", newSVpvn(it->qual.s, it->qual.l));
+            RETVAL = newRV((SV *)results);
         } else {
             XSRETURN_UNDEF;
         }
